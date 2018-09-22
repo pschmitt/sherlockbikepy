@@ -87,6 +87,13 @@ class SherlockDevice(object):
             self_test.get('gprs_generic_pass'),
             utils.str2dt(self_test.get('timestamp_utc_str')))
 
+    @property
+    def picture_url(self):
+        for bike in self._controller.get_bikes().get('bikes', {}):
+            sherlock_id = bike.get('sherlock', {}).get('sherlock_id', {})
+            if sherlock_id == self.sherlock_id:
+                return bike.get('master_pic_url')
+
     def update(self):
         devices = self._controller.devices
         for dev in devices:
