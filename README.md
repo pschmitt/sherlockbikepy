@@ -3,6 +3,12 @@
 This Python library implements the [sherlock.bike](https://sherlock.bike) API. It has been reverse
 engineered from the [Android app](https://play.google.com/store/apps/details?id=bike.sherlock.app).
 
+## Installation
+
+```bash
+pip install sherlockbikepy
+```
+
 ## Code snippet
 
 ```python
