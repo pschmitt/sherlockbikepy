@@ -14,6 +14,10 @@ BASE_URL = "https://20160322-bike2-api-dot-api-sherlock-00.appspot.com"
 LOGGER = logging.getLogger(__name__)
 
 
+class LoginFailedException(Exception):
+    pass
+
+
 class Sherlock(object):
     def __init__(self, username, password):
         self.username = username
@@ -58,11 +62,11 @@ class Sherlock(object):
         res = requests.post(url, json=data)
         if not res.ok:
             LOGGER.error("Login failed: %s", res.text)
-            return
+            raise LoginFailedException("Invalid credentials")
         jres = res.json()
         if jres.get("status") != "ok":
             LOGGER.error("Login failed: %s (%s)", jres, res.text)
-            return
+            raise LoginFailedException("Invalid credentials")
         LOGGER.info("Login successful! User id: %s", jres.get('user_id'))
         # Discard the status key
         return {k: v for k, v in jres.items() if k != 'status'}
