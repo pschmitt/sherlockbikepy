@@ -1,1 +1,1 @@
-from .sherlock import Sherlock
+from .sherlock import Sherlock, LoginFailedException
