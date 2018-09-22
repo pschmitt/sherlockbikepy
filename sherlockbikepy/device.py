@@ -16,6 +16,12 @@ class SherlockDevice(object):
         self._controller = controller
         self._json = json
 
+    def _get_corresponding_bike(self):
+        for bike in self._controller.get_bikes().get('bikes', {}):
+            sherlock_id = bike.get('sherlock', {}).get('sherlock_id', {})
+            if sherlock_id == self.sherlock_id:
+                return bike
+
     @property
     def imei(self):
         return self._json.get("imei")
@@ -50,11 +56,11 @@ class SherlockDevice(object):
 
     @property
     def battery_level(self):
-        return self._json.get("extended_info").get("battery_level")
+        return self._json.get("extended_info", {}).get("battery_level")
 
     @property
     def battery_voltage(self):
-        return self._json.get("extended_info").get("battery_voltage")
+        return self._json.get("extended_info", {}).get("battery_voltage")
 
     @property
     def location(self):
@@ -69,7 +75,7 @@ class SherlockDevice(object):
 
     @property
     def state(self):
-        state_full = self._json.get('sherlock_state').get('state')
+        state_full = self._json.get('sherlock_state', {}).get('state')
         # Remove the leading "SHERLOCK_STATE_" string
         return state_full.replace('SHERLOCK_STATE_', '')
 
@@ -88,11 +94,22 @@ class SherlockDevice(object):
             utils.str2dt(self_test.get('timestamp_utc_str')))
 
     @property
-    def picture_url(self):
-        for bike in self._controller.get_bikes().get('bikes', {}):
-            sherlock_id = bike.get('sherlock', {}).get('sherlock_id', {})
-            if sherlock_id == self.sherlock_id:
-                return bike.get('master_pic_url')
+    def bike_model(self):
+        bike = self._get_corresponding_bike()
+        if bike:
+            return bike.get('model')
+
+    @property
+    def bike_frame_number(self):
+        bike = self._get_corresponding_bike()
+        if bike:
+            return bike.get('frame_number')
+
+    @property
+    def bike_picture_url(self):
+        bike = self._get_corresponding_bike()
+        if bike:
+            return bike.get('master_pic_url')
 
     def update(self):
         devices = self._controller.devices
