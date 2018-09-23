@@ -15,11 +15,15 @@ class SherlockDevice(object):
     def __init__(self, controller, json):
         self._controller = controller
         self._json = json
+        self._bike_json = None
 
     def _get_corresponding_bike(self):
+        if self._bike_json:
+            return self._bike_json
         for bike in self._controller.get_bikes().get('bikes', {}):
             sherlock_id = bike.get('sherlock', {}).get('sherlock_id', {})
             if sherlock_id == self.sherlock_id:
+                self._bike_json = bike
                 return bike
 
     @property
@@ -112,6 +116,9 @@ class SherlockDevice(object):
             return bike.get('master_pic_url')
 
     def update(self):
+        # Invalidate bike cache
+        self._bike_json = None
+        # Update JSON
         devices = self._controller.devices
         for dev in devices:
             if (dev.sherlock_id == self.sherlock_id and
