@@ -104,6 +104,12 @@ class SherlockDevice(object):
             return bike.get('model')
 
     @property
+    def bike_serial_number(self):
+        bike = self._get_corresponding_bike()
+        if bike:
+            return bike.get('serial_number')
+
+    @property
     def bike_frame_number(self):
         bike = self._get_corresponding_bike()
         if bike:
