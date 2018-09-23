@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="sherlockbikepy",
-    version="0.2.0",
+    version="0.2.1",
     license="GPL3",
     description="Python library to interact with the sherlock.bike API",
     long_description=open("README.md").read(),
