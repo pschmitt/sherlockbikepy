@@ -43,7 +43,7 @@ def request(url, params=None, method='GET'):
         return
     try:
         jres = res.json()
-        LOGGER.info("Call was successful: %s", jres)
+        LOGGER.debug("Call was successful: %s", jres)
         status = jres.get("status")
         if status:
             if status != "ok":
